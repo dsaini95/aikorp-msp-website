@@ -8,7 +8,7 @@ EMAIL = "support@aikorp.in"
 PHONE = "+91 88261 58409"
 TEL = "+918826158409"
 WA = "https://wa.me/918826158409"
-CITY = "New Delhi, India"
+CITY = "New Delhi, India"; LINKEDIN = "https://www.linkedin.com/company/aikorp/"
 HOURS = "Mon to Sat, 9:00 to 19:00 IST"
 
 # ---------- icons (original line icons) ----------
@@ -107,7 +107,7 @@ def footer():
   <div class="f-grid">
     <div><a class="logo" href="index.html">{LOGO}<span>AI<b>Korp</b></span></a>
       <p style="margin-top:16px;max-width:36ch">Managed IT for growing businesses, specialising in Microsoft 365. Migrate, secure, support.</p>
-      <ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="tel:{TEL}">{PHONE}</a></li><li><a href="{WA}">WhatsApp: {PHONE}</a></li><li>{CITY}</li></ul></div>
+      <ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="tel:{TEL}">{PHONE}</a></li><li><a href="{WA}">WhatsApp: {PHONE}</a></li><li><a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn: AIKorp</a></li><li>{CITY}</li></ul></div>
     <div><h4>Services</h4><ul>{svc}<li><a href="services.html">All services</a></li></ul></div>
     <div><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="cases.html">Case studies</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
     <div><h4>Get started</h4><ul><li><a href="pricing.html">Managed plans</a></li><li><a href="contact.html#assessment">Free M365 health check</a></li><li><a href="contact.html">Book a call</a></li></ul></div>
@@ -421,7 +421,7 @@ contact = f'''
   <aside class="info">
     <div class="card"><span class="ico">{ic('mail')}</span><div><strong>Email</strong><br><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
     <div class="card"><span class="ico">{ic('phone')}</span><div><strong>Phone</strong><br><a href="tel:{TEL}">{PHONE}</a></div></div>
-    <div class="card"><span class="ico">{ic('wa')}</span><div><strong>WhatsApp</strong><br><a href="{WA}">Chat on WhatsApp</a><br><span class="note">{PHONE}</span></div></div>
+    <div class="card"><span class="ico">{ic('wa')}</span><div><strong>WhatsApp</strong><br><a href="{WA}">Chat on WhatsApp</a><br><span class="note">{PHONE}</span></div></div><div class="card"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg></span><div><strong>LinkedIn</strong><br><a href="{LINKEDIN}" target="_blank" rel="noopener">Follow AIKorp</a><br><span class="note">linkedin.com/company/aikorp</span></div></div>
     <div class="card"><span class="ico">{ic('clock')}</span><div><strong>Office hours</strong><br>{HOURS}<br><span class="note">24/7 critical support on Business and Secure+</span></div></div>
     <div class="card"><span class="ico">{ic('pin')}</span><div><strong>Location</strong><br>{CITY}<br><span class="note">Remote support everywhere</span></div></div>
     <div class="card" style="display:block"><h3 style="font-size:17px">What happens next</h3>{checks(['We reply within one business day','30-minute discovery call','Free health check report','A clear proposal, no pressure'])}</div>
