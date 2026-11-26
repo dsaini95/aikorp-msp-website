@@ -73,7 +73,13 @@
 
       msg.classList.add('show');
       if (!FORM_ENDPOINT) {
-        msg.textContent = 'Preview mode: this form is not connected yet, so nothing was sent. Add your form endpoint in assets/main.js to start receiving enquiries.';
+        // No form service yet: hand the enquiry to the visitor's email app, with WhatsApp as a backup.
+        const d = new FormData(form), g = k => (d.get(k) || '').toString().trim();
+        const topic = form.querySelector('#topic');
+        const topicTxt = topic ? topic.options[topic.selectedIndex].text : '';
+        const bodyTxt = `Name: ${g('name')}\nCompany: ${g('company')}\nEmail: ${g('email')}\nPhone: ${g('phone')}\nUsers: ${g('users')}\nInterested in: ${topicTxt}\n\n${g('message')}`;
+        location.href = 'mailto:support@aikorp.in?subject=' + encodeURIComponent('Website enquiry: ' + topicTxt + ' (' + g('company') + ')') + '&body=' + encodeURIComponent(bodyTxt);
+        msg.innerHTML = 'Your email app should open with your request ready to send. If it does not, email <a href="mailto:support@aikorp.in">support@aikorp.in</a> or <a href="https://wa.me/918826158409?text=' + encodeURIComponent('Hi AIKorp, ' + topicTxt + ' for ' + g('company') + '. ' + g('message')) + '">send it on WhatsApp</a>.';
         return;
       }
       msg.textContent = 'Sending…';
