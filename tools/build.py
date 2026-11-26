@@ -110,7 +110,7 @@ def footer():
       <ul><li><a href="mailto:{EMAIL}">{EMAIL}</a></li><li><a href="tel:{TEL}">{PHONE}</a></li><li><a href="{WA}">WhatsApp: {PHONE}</a></li><li><a href="{LINKEDIN}" target="_blank" rel="noopener">LinkedIn: AIKorp</a></li><li>{CITY}</li></ul></div>
     <div><h4>Services</h4><ul>{svc}<li><a href="services.html">All services</a></li></ul></div>
     <div><h4>Company</h4><ul><li><a href="about.html">About</a></li><li><a href="cases.html">Case studies</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-    <div><h4>Get started</h4><ul><li><a href="pricing.html">Managed plans</a></li><li><a href="contact.html#assessment">Free M365 health check</a></li><li><a href="contact.html">Book a call</a></li></ul></div>
+    <div><h4>Get started</h4><ul><li><a href="pricing.html">Managed plans</a></li><li><a href="microsoft-365-health-check.html">Free M365 health check</a></li><li><a href="microsoft-365-security-hardening.html">Security hardening, fixed price</a></li><li><a href="google-workspace-to-microsoft-365-migration.html">Google Workspace to M365</a></li><li><a href="white-label-microsoft-365-support.html">White-label for IT firms</a></li></ul></div>
   </div>
   <div class="f-bottom">
     <span>© <span data-year>2026</span> AIKorp. All rights reserved.</span>
@@ -118,7 +118,8 @@ def footer():
   </div>
 </div></footer>'''
 
-def page(fname, title, desc, body):
+SITE = 'https://www.aikorp.in/'
+def page(fname, title, desc, body, ld=''):
     html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -126,6 +127,12 @@ def page(fname, title, desc, body):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<link rel="canonical" href="{SITE}{'' if fname=='index.html' else fname}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AIKorp">
+<meta property="og:url" content="{SITE}{'' if fname=='index.html' else fname}">
+<meta property="og:image" content="{SITE}assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -133,7 +140,7 @@ def page(fname, title, desc, body):
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="icon" href="data:image/svg+xml,{LOGO.replace('"', "'").replace('#', '%23').replace('<svg', '<svg xmlns=%27http://www.w3.org/2000/svg%27')}">
-</head>
+{ld}</head>
 <body>
 {header(fname)}
 <main id="main">
@@ -150,12 +157,14 @@ def page(fname, title, desc, body):
 
 CTA = f'''<section class="band"><div class="wrap"><div class="cta-band">
   <div><h2>Get a free Microsoft 365 health check</h2><p>In 30 minutes we review your security settings, licences and backup, then send you a short report with quick wins. No obligation.</p></div>
-  <a class="btn btn-primary" href="contact.html#assessment">Book my health check</a>
+  <a class="btn btn-primary" href="microsoft-365-health-check.html">Book my health check</a>
 </div></div></section>'''
 
 def checks(items):
     return '<ul class="checks">' + ''.join(f'<li>{ic("check")}<span>{t}</span></li>' for t in items) + '</ul>'
 
+LD_ORG = '''<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"AIKorp","url":"https://www.aikorp.in/","logo":"https://www.aikorp.in/assets/og.png","image":"https://www.aikorp.in/assets/og.png","description":"Independent managed service provider specialising in Microsoft 365: migration, security hardening, Intune, backup and helpdesk for small businesses.","email":"support@aikorp.in","telephone":"+91-88261-58409","address":{"@type":"PostalAddress","addressLocality":"New Delhi","addressRegion":"Delhi","addressCountry":"IN"},"areaServed":"Worldwide","priceRange":"₹₹","sameAs":["https://www.linkedin.com/company/aikorp/"],"openingHours":"Mo-Sa 09:00-19:00"}</script>
+'''
 # ================= HOME =================
 CHIPS = [('Exchange Online','mail','#1f6fd1'),('Teams','chat','#5b5fc7'),('SharePoint and OneDrive','folder','#0f8a8a'),('Intune','laptop','#2b7a3d'),('Entra ID','key','#0b5cad'),('Defender','shield','#c2410c'),('Purview','lock','#7c3aed'),('Copilot','spark','#d6336c'),('Power Platform','flow','#6d28d9')]
 chips = ''.join(f'<span class="chip"><i style="background:{c}">{ic(i)}</i>{n}</span>' for n,i,c in CHIPS)
@@ -230,7 +239,7 @@ home = f'''
 </div></section>
 {CTA}
 '''
-page('index.html', 'AIKorp | Managed Microsoft 365 services', 'AIKorp is a managed service provider specialising in Microsoft 365: migration, security, Intune, backup, helpdesk and Copilot readiness.', home)
+page('index.html', 'AIKorp | Managed Microsoft 365 services', 'AIKorp is a managed service provider specialising in Microsoft 365: migration, security, Intune, backup, helpdesk and Copilot readiness.', home, ld=LD_ORG)
 
 # ================= SERVICES =================
 subnav = ''.join(f'<a href="#{s["slug"]}">{s["name"]}</a>' for s in SERVICES)
@@ -275,7 +284,7 @@ def cell(v):
 rows = ''.join('<tr><td>'+r[0]+'</td>'+''.join(cell(v) for v in r[1:])+'</tr>' for r in ROWS)
 FAQ = [
  ('Are Microsoft 365 licences included?','No. Plan prices cover our management and support only. You can keep buying licences from Microsoft or your current reseller, and we will manage and right-size them for you so you never pay for seats you do not use.'),
- ('Is there a minimum contract?','Plans are available month to month. Annual agreements get a 10% discount. All prices are in Indian rupees and GST at 18% is added to every invoice. Onboarding projects are quoted separately as a fixed fee.'),
+ ('Is there a minimum contract?','Plans are available month to month. Annual agreements get a 10% discount. Prices for Indian customers are in rupees, with 18% GST added. Customers outside India are billed in US dollars. Onboarding projects are quoted separately as a fixed fee.'),
  ('What does onboarding cost?','It depends on the size and state of your environment. After the free health check we send a fixed-fee quote, so there are no surprises.'),
  ('Do you charge for migrations?','Migrations are fixed-fee projects quoted after discovery. Customers who join a managed plan get a discounted migration rate.'),
  ('Do you support on-site work?','We are remote-first, which keeps prices low. On-site visits within our area are available at an hourly rate.'),
@@ -292,6 +301,7 @@ pricing = f'''
 <section style="padding-bottom:56px"><div class="wrap">
   <div class="plans">{plans}</div>
   <p class="note center" style="margin-top:20px">Prices in INR, excluding 18% GST and Microsoft licences. Minimum 5 users. Onboarding and migration projects are quoted separately.</p>
+  <p class="note center" style="margin-top:8px"><strong>Outside India?</strong> We bill in US dollars: Essentials US$9, Business US$18, Secure+ US$29 per user per month. Support runs remotely across time zones.</p>
 </div></section>
 <section class="band alt"><div class="wrap">
   <h2>Compare plans</h2>
@@ -299,7 +309,7 @@ pricing = f'''
 </div></section>
 <section class="band"><div class="wrap split" style="align-items:start">
   <div><h2>Projects and add-ons</h2><p class="lead">Need one thing done well? We also take on fixed-fee projects, with or without a managed plan.</p>
-  {checks(['Microsoft 365 and tenant-to-tenant migrations','SharePoint intranet builds','Copilot readiness assessment and pilot','Power Platform apps and automations','Security assessment and remediation'])}
+  {checks(['<a href="microsoft-365-security-hardening.html">Microsoft 365 security hardening</a>: ₹14,999 or US$199 for up to 25 users','<a href="google-workspace-to-microsoft-365-migration.html">Google Workspace to Microsoft 365 migration</a>: from ₹1,499 or US$20 per mailbox','Tenant-to-tenant and Exchange migrations, quoted after discovery','SharePoint intranets, Copilot readiness and Power Platform automations','<a href="white-label-microsoft-365-support.html">White-label Microsoft 365 help for IT firms</a>: US$25 per hour'])}
   <a class="btn btn-primary" href="contact.html">Request a quote</a></div>
   <div class="faq"><h2>Questions</h2>{faq}</div>
 </div></section>
@@ -411,7 +421,7 @@ contact = f'''
       <div class="field"><label for="users">Number of users</label><select id="users" name="users"><option>1 to 10</option><option selected>11 to 50</option><option>51 to 150</option><option>151 to 500</option><option>500+</option></select></div>
       <div class="field"><label for="topic">I am interested in</label><select id="topic" name="topic">
         <option value="assessment">Free Microsoft 365 health check</option><option value="plan-essentials">Essentials plan</option><option value="plan-business">Business plan</option><option value="plan-secure">Secure+ plan</option>
-        <option value="migration">Migration project</option><option value="security">Security and compliance</option><option value="copilot">Copilot readiness</option><option value="newsletter">Newsletter</option><option value="other">Something else</option></select></div>
+        <option value="hardening">Security hardening (fixed price)</option><option value="migration">Migration project</option><option value="white-label">White-label support for my IT firm</option><option value="security">Security and compliance</option><option value="copilot">Copilot readiness</option><option value="newsletter">Newsletter</option><option value="other">Something else</option></select></div>
       <div class="field full"><label for="message">How can we help? *</label><textarea id="message" name="message" required placeholder="Current setup, pain points, timelines..."></textarea><span class="err" id="err-message"></span></div>
       <div class="field full"><label class="chk"><input type="checkbox" id="consent" name="consent" required> I agree to AIKorp contacting me about my enquiry. *</label><span class="err" id="err-consent"></span></div>
     </div>
@@ -429,4 +439,276 @@ contact = f'''
 </div></section>
 '''
 page('contact.html', 'Contact | AIKorp', 'Book a call or a free Microsoft 365 health check with AIKorp.', contact)
+
+# ================= LANDING PAGES (30-day push) =================
+import json
+def faq_ld(items):
+    return '<script type="application/ld+json">' + json.dumps({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in items]}, ensure_ascii=False) + '</script>\n'
+
+def landing(fname, crumb, h1, lead, cta_label, cta_href, price_html, incl, steps, faqs, title, desc, intro_h2, intro):
+    st = ''.join(f'<div class="card"><h3>{a}</h3><p>{b}</p></div>' for a,b in steps)
+    fq = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q,a in faqs)
+    body = f'''
+<section class="page-hero"><div class="wrap">
+  <div class="crumbs"><a href="index.html">Home</a> / {crumb}</div>
+  <h1>{h1}</h1>
+  <p class="lead">{lead}</p>
+  <div class="hero-actions"><a class="btn btn-primary" href="{cta_href}">{cta_label}</a><a class="btn btn-ghost" href="{WA}">WhatsApp us</a></div>
+</div></section>
+<section class="band"><div class="wrap split" style="align-items:start">
+  <div><h2>{intro_h2}</h2><p class="lead">{intro}</p>{price_html}</div>
+  <div class="card"><h3>What is included</h3>{checks(incl)}</div>
+</div></section>
+<section class="band alt"><div class="wrap">
+  <h2>How it works</h2>
+  <div class="grid" style="margin-top:24px">{st}</div>
+</div></section>
+<section class="band"><div class="wrap"><div class="faq"><h2>Questions</h2>{fq}</div></div></section>
+{CTA}
+'''
+    page(fname, title, desc, body, ld=faq_ld(faqs))
+
+# Landing page content. Edit the text here, then run: python3 tools/build.py .
+LANDINGS = json.loads(r'''[
+ {
+  "fname": "microsoft-365-health-check.html",
+  "crumb": "Free Microsoft 365 health check",
+  "h1": "Free Microsoft 365 health check for small businesses",
+  "lead": "In 30 minutes we review your tenant's security, licences and backup, then send a short written report with the fixes that matter most. Free, remote, and no obligation.",
+  "cta_label": "Book my free health check",
+  "cta_href": "contact.html#assessment",
+  "price_html": "<p class=\"price\" style=\"margin-top:18px\"><strong>Free.</strong> <small>Available worldwide, by video call.</small></p>",
+  "incl": [
+   "MFA, admin accounts and sign-in risk review",
+   "Email security: SPF, DKIM, DMARC and anti-phishing settings",
+   "External sharing in SharePoint, OneDrive and Teams",
+   "Licence review: seats you pay for but do not use",
+   "Backup and retention check",
+   "A written report with your top 5 fixes, ranked by risk"
+  ],
+  "steps": [
+   [
+    "1. Book a slot",
+    "Pick a time on the contact form or message us on WhatsApp. We confirm within one business day."
+   ],
+   [
+    "2. 30-minute call",
+    "We walk through your admin centre together, or you grant temporary read-only access. We never change anything during the check."
+   ],
+   [
+    "3. Your report",
+    "Within two business days you get a plain-English report with quick wins you can do yourself."
+   ],
+   [
+    "4. Your choice",
+    "Fix it yourself, or ask us for a fixed-price quote. No pressure either way."
+   ]
+  ],
+  "faqs": [
+   [
+    "Is it really free?",
+    "Yes. The health check is how new customers get to know us. There is no charge and no contract."
+   ],
+   [
+    "What access do you need?",
+    "Ideally a short screen-share with your Microsoft 365 admin. If you prefer, you can grant a temporary Global Reader role, which can see settings but cannot change them, and remove it afterwards."
+   ],
+   [
+    "Do you work outside India?",
+    "Yes. We are based in New Delhi and support customers remotely in any time zone."
+   ],
+   [
+    "How many users do I need?",
+    "Any size from 1 user up. It is most useful for businesses with 5 to 300 users."
+   ]
+  ],
+  "title": "Free Microsoft 365 Health Check | AIKorp",
+  "desc": "A free 30-minute Microsoft 365 security, licence and backup review with a written report of your top fixes. Remote, worldwide, no obligation.",
+  "intro_h2": "Know where your tenant stands",
+  "intro": "Most small business tenants still run with default settings that leave email and files exposed, and many pay for licences nobody uses. The health check shows you both in half an hour."
+ },
+ {
+  "fname": "microsoft-365-security-hardening.html",
+  "crumb": "Microsoft 365 security hardening",
+  "h1": "Microsoft 365 security hardening, fixed price, done in 5 days",
+  "lead": "We lock down your Microsoft 365 tenant against phishing, account takeover and data leaks, then hand you a before-and-after Secure Score report. One fixed price, no retainer needed.",
+  "cta_label": "Get my tenant secured",
+  "cta_href": "contact.html#hardening",
+  "price_html": "<p class=\"price\" style=\"margin-top:18px\">₹14,999 <small>or US$199, one-off, up to 25 users</small></p><p class=\"note\">Extra users ₹400 or US$5 each. Excludes GST for Indian customers and any Microsoft licences.</p>",
+  "incl": [
+   "MFA for every user, with security defaults or Conditional Access depending on your licences",
+   "Block legacy authentication and risky sign-ins",
+   "Admin role clean-up and break-glass account",
+   "SPF, DKIM and DMARC set up on your domain",
+   "Defender anti-phishing, Safe Links and Safe Attachments where licensed",
+   "SharePoint, OneDrive and Teams external sharing tightened",
+   "Mailbox auditing and alert policies on",
+   "Before-and-after Secure Score report and a one-page admin guide"
+  ],
+  "steps": [
+   [
+    "1. Discovery",
+    "A 30-minute call and read-only review to agree the change list with you."
+   ],
+   [
+    "2. Plan and schedule",
+    "You approve every change before we make it. We plan user-facing changes such as MFA rollout with you."
+   ],
+   [
+    "3. Hardening",
+    "We apply the changes remotely over up to 5 business days and help your users through MFA sign-up."
+   ],
+   [
+    "4. Handover",
+    "You get the Secure Score report, documentation, and 14 days of follow-up support."
+   ]
+  ],
+  "faqs": [
+   [
+    "Which licences does this work with?",
+    "Business Basic, Standard and Premium, and Office 365 E1, E3 and E5. Some features, such as Conditional Access and Defender for Office 365, need Business Premium or an add-on, and we tell you up front what your licences include."
+   ],
+   [
+    "Will my users be disrupted?",
+    "The only change most users notice is setting up MFA. We roll it out in stages and help anyone who gets stuck."
+   ],
+   [
+    "Can you do this for customers outside India?",
+    "Yes. The work is fully remote and we schedule around your time zone. International customers are billed in US dollars."
+   ],
+   [
+    "What if I have more than 25 users?",
+    "Each extra user is ₹400 or US$5. For more than 150 users, we quote after the discovery call."
+   ]
+  ],
+  "title": "Microsoft 365 Security Hardening, Fixed Price | AIKorp",
+  "desc": "Fixed-price Microsoft 365 security hardening: MFA, legacy auth blocked, DMARC, Defender and sharing settings, with a before-and-after Secure Score report. ₹14,999 or US$199.",
+  "intro_h2": "Stop the attacks that hit small businesses most",
+  "intro": "Phishing and stolen passwords cause most small business breaches, and Microsoft 365 already includes most of the defences. They just are not switched on by default. We switch them on properly, document them, and show you the result."
+ },
+ {
+  "fname": "google-workspace-to-microsoft-365-migration.html",
+  "crumb": "Google Workspace to Microsoft 365",
+  "h1": "Move from Google Workspace to Microsoft 365, without losing an email",
+  "lead": "Fixed per-mailbox pricing for moving mail, calendars, contacts and Drive files into Microsoft 365, with a weekend cutover and two weeks of support afterwards.",
+  "cta_label": "Plan my migration",
+  "cta_href": "contact.html#migration",
+  "price_html": "<p class=\"price\" style=\"margin-top:18px\">₹1,499 <small>or US$20 per mailbox</small></p><p class=\"note\">Minimum ₹9,999 or US$149. Excludes GST for Indian customers and Microsoft licences.</p>",
+  "incl": [
+   "Mail, calendar and contacts moved for every user",
+   "Google Drive files moved to OneDrive, shared drives to SharePoint",
+   "DNS, MX and domain cut-over planned and done for you",
+   "New Microsoft 365 tenant set up with a security baseline",
+   "Outlook and Teams set up on laptops and phones, with user guides",
+   "Two weeks of post-move support for your team"
+  ],
+  "steps": [
+   [
+    "1. Discovery",
+    "We check mailbox sizes, Drive data and shared drives, and agree a cut-over date."
+   ],
+   [
+    "2. Pre-stage",
+    "We set up your tenant and copy historic data in the background while you keep working."
+   ],
+   [
+    "3. Cut-over",
+    "Over a weekend or evening we switch your mail and copy the final changes."
+   ],
+   [
+    "4. Support",
+    "We help users sign in, fix anything missing and stay on hand for two weeks."
+   ]
+  ],
+  "faqs": [
+   [
+    "Do I need to buy Microsoft 365 licences first?",
+    "Yes, you buy licences directly from Microsoft or your reseller and own the tenant. We help you pick the right plan so you do not overspend."
+   ],
+   [
+    "Will email stop during the move?",
+    "No. Mail keeps flowing during the migration and the switch happens at a time you choose."
+   ],
+   [
+    "Can you migrate from other providers?",
+    "Yes, including Zoho Mail, cPanel and IMAP hosting, on-premises Exchange and other Microsoft 365 tenants. Ask for a quote."
+   ],
+   [
+    "Do you work with businesses outside India?",
+    "Yes. Migrations are fully remote and we schedule cut-overs in your time zone."
+   ]
+  ],
+  "title": "Google Workspace to Microsoft 365 Migration | AIKorp",
+  "desc": "Fixed-price Google Workspace to Microsoft 365 migration: mail, calendar, contacts and Drive, weekend cut-over and two weeks of support. From ₹1,499 or US$20 per mailbox.",
+  "intro_h2": "A planned move, not a weekend of panic",
+  "intro": "Moving email platforms goes wrong when nobody plans the DNS, the shared drives or the people. We plan all three, do the heavy lifting in the background, and make the switch at a time that suits you."
+ },
+ {
+  "fname": "white-label-microsoft-365-support.html",
+  "crumb": "White-label support for IT firms",
+  "h1": "White-label Microsoft 365 help for IT firms and MSPs",
+  "lead": "Overflow and project capacity for Microsoft 365 work, delivered under your brand. Migrations, Intune roll-outs, security hardening and tier 2 tickets, from US$25 per hour.",
+  "cta_label": "Talk about a partnership",
+  "cta_href": "contact.html#white-label",
+  "price_html": "<p class=\"price\" style=\"margin-top:18px\">US$25 <small>per hour, or fixed price per project</small></p><p class=\"note\">Prepaid blocks of 10 hours for US$225. Indian partners billed in INR.</p>",
+  "incl": [
+   "Works under your brand, with your ticketing system and processes",
+   "Microsoft 365 migrations: Google Workspace, IMAP, Exchange, tenant-to-tenant",
+   "Intune enrolment, compliance and app deployment",
+   "Security hardening, Conditional Access and DMARC projects",
+   "Tier 2 Microsoft 365 and Exchange Online tickets",
+   "Clear notes on every task so your team stays in control"
+  ],
+  "steps": [
+   [
+    "1. Intro call",
+    "We learn your stack, tools and standards, and sign your NDA."
+   ],
+   [
+    "2. Pilot task",
+    "Start with one small, paid task so you can judge the quality."
+   ],
+   [
+    "3. Ongoing",
+    "Send work by ticket or email. We confirm scope and hours before starting."
+   ],
+   [
+    "4. Report",
+    "Every task closes with notes and time used, ready for you to bill your client."
+   ]
+  ],
+  "faqs": [
+   [
+    "Will you contact our clients directly?",
+    "Only if you want us to, and always as part of your team. We never market to your clients."
+   ],
+   [
+    "What hours do you cover?",
+    "We are in India (IST), which gives US, UK and Australian firms useful overnight and early-morning coverage. Urgent work by arrangement."
+   ],
+   [
+    "How do you handle access and security?",
+    "We use named accounts you create, with MFA and the least privilege needed, and can work through GDAP if you use it. Access can be removed at any time."
+   ],
+   [
+    "Are you a Microsoft Partner?",
+    "No. AIKorp is an independent MSP and does not resell licences, so we never compete with you for your clients' licensing."
+   ]
+  ],
+  "title": "White-label Microsoft 365 Support for MSPs | AIKorp",
+  "desc": "White-label Microsoft 365 migrations, Intune, security hardening and tier 2 support for IT firms and MSPs. From US$25 per hour, NDA and your brand.",
+  "intro_h2": "Extra Microsoft 365 hands when you need them",
+  "intro": "Hiring for a spike in project work is slow and expensive. We take on Microsoft 365 tasks under your brand, document everything, and hand it back, so you can say yes to more work."
+ }
+]''')
+for _l in LANDINGS:
+    landing(**_l)
+
+# --- sitemap.xml and robots.txt
+_pages = ["index.html","services.html","pricing.html","microsoft-365-health-check.html","microsoft-365-security-hardening.html","google-workspace-to-microsoft-365-migration.html","white-label-microsoft-365-support.html","about.html","cases.html","blog.html","contact.html"]
+with open(os.path.join(OUT,'sitemap.xml'),'w') as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(f'  <url><loc>{SITE}{"" if p=="index.html" else p}</loc></url>\n' for p in _pages) + '</urlset>\n')
+with open(os.path.join(OUT,'robots.txt'),'w') as f:
+    f.write(f'User-agent: *\nAllow: /\n\nSitemap: {SITE}sitemap.xml\n')
+
 print('built', sorted(os.listdir(OUT)))
